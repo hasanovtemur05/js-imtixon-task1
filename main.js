@@ -1,48 +1,33 @@
-const jsonServer = require('json-server');
-const server = jsonServer.create();
-const router = jsonServer.router('db.json'); // Ma'lumotlaringiz saqlanadigan fayl
-const middlewares = jsonServer.defaults();
+const add_task = document.getElementById("add");
+const save = document.getElementById("save_modal");
+const result = document.getElementById("result");
+const delete_modal = document.getElementById("delete_modal");
+const pagination = document.getElementById("pagination");
+const modal = document.getElementById('modal');
 
-server.use(middlewares);
-server.use(router);
-server.listen(process.env.PORT || 3000, () => {
-  console.log('JSON Server is running');
-});
+let current_page = 1;
+let product_per_page = 2;
 
+let form = {};
+let product = [];
+let baseUrl = "http://localhost:3000/avto";
 
-
-
-const add_task = document.getElementById("add")
-const save = document.getElementById("save_modal")
-const result = document.getElementById("result")
-const delete_modal = document.getElementById("delete_modal")
-const pagination = document.getElementById("pagination")
-
-let current_page = 1
-let product_per_page = 2
-
-let form = {}
-let product = []
-let baseUrl = "http://localhost:3000/avto"
-
-document.addEventListener('DOMContentLoaded', function(event){
-    event.preventDefault()
-    const modal = document.getElementById('modal');
+document.addEventListener('DOMContentLoaded', function(event) {
+    event.preventDefault();
     add_task.addEventListener('click', () => {
         modal.style.display = 'block';
     });
-    save.addEventListener("click", saveProduct)
+    save.addEventListener("click", saveProduct);
     window.addEventListener('click', (event) => {
         if (event.target === modal) {
             modal.style.display = 'none';
         }
     });
-    getProducts()
+    delete_modal.addEventListener("click", function() {
+        modal.style.display = "none";
+    });
+    getProducts();
 });
-
-delete_modal.addEventListener("click", function(){
-    modal.style.display = "none"
-})
 
 async function saveProduct() {
     try {
@@ -59,44 +44,42 @@ async function saveProduct() {
 
         if (response.ok) {
             form = {};
-            document.getElementById('modal').style.display = 'none';
+            modal.style.display = 'none';
             getProducts();
-            saveProduct()
         }
     } catch (error) {
         console.log(error);
     }
 }
 
-async function getProducts(){
-    try{
-        const response = await fetch(`${baseUrl}`)
-        product = await response.json()
-        displayProduct()
-        paginationProduct()
-        saveProduct()
-    }catch(error){
+async function getProducts() {
+    try {
+        const response = await fetch(baseUrl);
+        product = await response.json();
+        displayProduct();
+        paginationProduct();
+    } catch (error) {
         console.log(error);
     }
 }
 
-function handleChange(event){
-    const {name, value} = event.target
-    form = {...form, [name] : value}
+function handleChange(event) {
+    const { name, value } = event.target;
+    form = { ...form, [name]: value };
 }
 
-function displayProduct(){
-    result.innerHTML = ""
-    let start_index = (current_page - 1) * product_per_page
-    let end_index = start_index + product_per_page
-    let pagination_product = product.slice(start_index, end_index)
+function displayProduct() {
+    result.innerHTML = "";
+    let start_index = (current_page - 1) * product_per_page;
+    let end_index = start_index + product_per_page;
+    let pagination_product = product.slice(start_index, end_index);
     pagination_product.forEach((item) => {
         result.innerHTML += `
         <div id="hero">
             <h1 class="title_hero">${item.name}</h1>
             <p class="desc">Color: <span class="item">${item.color}</span></p>
             <p class="desc">Brand: <span class="item">${item.brand}</span></p>
-            <p class="desc">Feul: <span class="item">${item.fuel}</span></p>
+            <p class="desc">Fuel: <span class="item">${item.fuel}</span></p>
             <p class="desc">Horsepower: <span class="item">${item.horsepower}</span></p>
             <p class="desc">Transmission: <span class="item">${item.transmission}</span></p>
             <p class="desc">Condition: <span class="item">${item.condition}</span></p>
@@ -106,33 +89,33 @@ function displayProduct(){
                 <button class="delete_hero" onclick="deleteProduct('${item.id}')">delete</button>
             </div>
         </div>
-        `
-    })
+        `;
+    });
 }
 
-function paginationProduct(){
-    pagination.innerHTML = ""
-    let page_count = Math.ceil(product.length / product_per_page)
-    for(let i = 1; i <= page_count; i++){
-        let btn = document.createElement("button")
-        btn.innerText = i
-        if (i === current_page) btn.classList.add("active")
+function paginationProduct() {
+    pagination.innerHTML = "";
+    let page_count = Math.ceil(product.length / product_per_page);
+    for (let i = 1; i <= page_count; i++) {
+        let btn = document.createElement("button");
+        btn.innerText = i;
+        if (i === current_page) btn.classList.add("active");
         btn.addEventListener('click', function() {
-            current_page = i
-            displayProduct()
-            paginationProduct()
+            current_page = i;
+            displayProduct();
+            paginationProduct();
         });
-        pagination.appendChild(btn)
+        pagination.appendChild(btn);
     }
 }
 
-async function deleteProduct(id){
-    try{
-        await fetch(`${baseUrl}/${id}`,{
+async function deleteProduct(id) {
+    try {
+        await fetch(`${baseUrl}/${id}`, {
             method: "DELETE"
-        })
+        });
         getProducts(); 
-    }catch(error){
+    } catch (error) {
         console.log(error);
     }
 }
@@ -142,23 +125,16 @@ async function editProduct(id) {
     
     if (obj) {
         form = { ...obj }; 
-        document.querySelector("input[name='name']").value = form.name
-        document.querySelector("input[name='color']").value = form.color
-        document.querySelector("input[name='year']").value = form.year
-        document.querySelector("input[name='brand']").value = form.brand
-        document.querySelector("input[name='fuel']").value = form.fuel
-        document.querySelector("input[name='horsepower']").value = form.horsepower
-        document.querySelector("input[name='transmission']").value = form.transmission
-        document.querySelector("input[name='condition']").value = form.condition
-        document.querySelector("input[name='price']").value = form.price
+        document.querySelector("input[name='name']").value = form.name;
+        document.querySelector("input[name='color']").value = form.color;
+        document.querySelector("input[name='year']").value = form.year;
+        document.querySelector("input[name='brand']").value = form.brand;
+        document.querySelector("input[name='fuel']").value = form.fuel;
+        document.querySelector("input[name='horsepower']").value = form.horsepower;
+        document.querySelector("input[name='transmission']").value = form.transmission;
+        document.querySelector("input[name='condition']").value = form.condition;
+        document.querySelector("input[name='price']").value = form.price;
     
         modal.style.display = 'block'; 
     }
 }
-
-    
-   
-   
-
-
-
