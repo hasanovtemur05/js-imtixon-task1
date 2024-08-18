@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/style.min.css">
+</head>
+<body>
+    <div class="header">
+        <div class="header__nav container">
+            <h1 class="header__title">Car Inventory</h1>
+            <button class="header__btn" id="add">Add Product</button>
+        </div>
+    </div>
+    <div class="hero container" id="result">
+        
+    </div>
+
+
+
+    <!-- MODAL -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h2 class="modal_title">Car Selection</h2>
+            <input type="text" placeholder="Car Name"  name="name" onkeyup="handleChange(event)">
+                <input type="text" placeholder="Color" name="color" onkeyup="handleChange(event)">
+                <input type="text" placeholder="Year of manufacture" name="year" onkeyup="handleChange(event)">
+                <input type="text" placeholder="Brand" name="brand" onkeyup="handleChange(event)">
+                <input type="text" placeholder="Fuel type" name="fuel" onkeyup="handleChange(event)">
+                <input type="number" placeholder="Horsepower" name="horsepower" onkeyup="handleChange(event)">
+                <input type="text" placeholder="Transmission" name="transmission" onkeyup="handleChange(event)">
+                <input type="text" placeholder="Condition" name="condition" onkeyup="handleChange(event)">
+                <input type="number" placeholder="Price" name="price" onkeyup="handleChange(event)">
+           <div>
+                
+                <button id="save_modal">Save</button>
+                <button id="delete_modal">Delete</button>       
+           </div>
+        </div>
+    </div>
+    
+    <script src="./main.js"></script>
+</body>
+</html>
