@@ -1,3 +1,16 @@
 {
-  "avto": []
+  "avto": [
+    {
+      "id": "3404",
+      "name": "gentra",
+      "color": "black",
+      "year": "2020",
+      "brand": "gm",
+      "fuel": "kds",
+      "horsepower": "120000",
+      "transmission": "adawd",
+      "condition": "awdwada",
+      "price": "12000"
+    }
+  ]
 }
