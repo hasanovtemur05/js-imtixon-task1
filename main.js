@@ -1,3 +1,17 @@
+const jsonServer = require('json-server');
+const server = jsonServer.create();
+const router = jsonServer.router('db.json'); // Ma'lumotlaringiz saqlanadigan fayl
+const middlewares = jsonServer.defaults();
+
+server.use(middlewares);
+server.use(router);
+server.listen(process.env.PORT || 3000, () => {
+  console.log('JSON Server is running');
+});
+
+
+
+
 const add_task = document.getElementById("add")
 const save = document.getElementById("save_modal")
 const result = document.getElementById("result")
@@ -47,6 +61,7 @@ async function saveProduct() {
             form = {};
             document.getElementById('modal').style.display = 'none';
             getProducts();
+            saveProduct()
         }
     } catch (error) {
         console.log(error);
@@ -59,6 +74,7 @@ async function getProducts(){
         product = await response.json()
         displayProduct()
         paginationProduct()
+        saveProduct()
     }catch(error){
         console.log(error);
     }
